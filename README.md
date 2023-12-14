@@ -82,13 +82,28 @@ Below are the first five rows of the test dataset for our final_model:
 
 ---
 ## Baseline Model
-
+For the baseline model, we used three features `Climate.region`, `Res.sales`, `Outage.duration` to predict if the power outage is caused by the 'severe weather' in original feature `Cause.category` (which is the 1 in the transformed feature `Cause.dummy`) by using the Desition Tree Classifier. 
 
 **Features Used**:
+- `Climate.region` (Nomial Category): is the U.S. Climate regions as specified by the National Centers for Environmental Information. This feature is of data type 'object'. 
+- `Res.sales` (Quantitative feature): is the Electricity consumption in the residential sector (megawatt-hour).
+This feature is of data type 'float64'. 
+- `Outage.duration` (Quantitative feature): is the Duration of outage events (in minutes).
+This feature is of data type 'float64'.
 
 **Model Construction**: 
+The necessary encodings for the nominal data were performed using OneHotEncoder. The quantitative features were kept as they were. 
 
 **Model Performance**: 
+The model achieved a training accuracy of approximately 99.9% and a testing accuracy of about 68.4%. While the high training accuracy suggests that the model has learned from the data effectively, the lower testing accuracy indicates that the model may not generalize as well to unseen data. This discrepancy suggests that the model might be overfitting the training data. The F1 score, which balances precision and recall, is particularly useful in binary classification problems like this, where the cost of false positives and false negatives may differ. 
+
+Our base_line_model has an F1 score of 0.6 on the test data set which indicates that the model has a moderate balance between precision and recall. This score suggests that the model is somewhat effective at classifying the positive class (in this case, 'severe weather') but also has room for improvement.
+
+![confusion matrix1](confusion_matrix1.png)
+
+Looking at the confusion matrix, we have 200 true negatives (TN) and 105 true positives (TP), which means the model correctly identified 200 cases as not severe weather and 105 cases as severe weather. However, there are 89 false positives (FP) and 49 false negatives (FN). The number of false negatives implies that the model missed 49 cases of severe weather, while the false positives indicate that 89 cases were incorrectly predicted as severe weather. This confusion matrix and the F1 score combined suggest that the model is better at identifying 'non-severe weather' instances than 'severe weather' ones.
+
+A focus on reducing both false positives and false negatives would help improve the model’s F1 score. We will be using feature engineering, hyperparameter tuning and a different model to improve upon our base_line model. 
 
 ---
 ## Final Model
