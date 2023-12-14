@@ -168,7 +168,7 @@ An F1 score improvement from 0.61 of the baseline model to 0.74 of the final mod
 
 ![confusion matrix3](confusion_matrix3.png)
 
-The improvement in our final model over the baseline model can also be observed through the confusion matrix. Our final model shows a higher number of true positives and true negatives and a lower number of false positives and false negatives compared to the baseline model, it signifies better performance in correctly classifying both severe weather-related outages and non-severe weather-related outages. This enhanced performance suggests a more accurate and reliable model.
+The improvement in our final model over the baseline model can also be observed through the confusion matrix. We have 221 true negatives (TN) and 129 true positives (TP). Our final model shows a higher number of true positives and true negatives and a lower number of false positives and false negatives compared to the baseline model, it signifies better performance in correctly classifying both severe weather-related outages and non-severe weather-related outages. This enhanced performance suggests a more accurate and reliable model.
 
 This suggests the additional features and hyperparameter tuning have likely contributed to capturing the underlying patterns in the data more effectively.
 
