@@ -40,7 +40,7 @@ We change the `Cause.category` column to 0's and 1's corresponding to the entry 
 ### Train and Test data split
 Data before and including the Year 2012 will be our training data and data starting from 2013 will be our test data. 
 
-Below are the first five rows of the training dataset for our base_ine_model:
+Below are the first five rows of the training dataset for our baseline_model:
 
 |    | Climate Region     | Res.sales | Outage.duration |
 |----|--------------------|-----------|-----------------|
@@ -50,7 +50,7 @@ Below are the first five rows of the training dataset for our base_ine_model:
 |  6 | East North Central | 1.6734e+06| 1860.0          |
 |  7 | East North Central | 2.1875e+06| 2970.0          |
 
-Below are the first five rows of the test dataset for our base_ine_model:
+Below are the first five rows of the test dataset for our baseline_model:
 
 |    | Climate Region     | Res.sales | Outage.duration |
 |----|--------------------|-----------|-----------------|
@@ -82,7 +82,7 @@ Below are the first five rows of the test dataset for our final_model:
 
 ---
 ## Baseline Model
-For the baseline model, we used three features `Climate.region`, `Res.sales`, `Outage.duration` to predict if the power outage is caused by the 'severe weather' in original feature `Cause.category` (which is the 1 in the transformed feature `Cause.dummy`) by using the Desition Tree Classifier. 
+For the baseline model, we used three features `Climate.region`, `Res.sales`, `Outage.duration` to predict if the power outage is caused by the 'severe weather' in the original feature `Cause.category` (which is the 1 in the transformed feature `Cause.dummy`) by using the Desition Tree Classifier. 
 
 **Features Used**:
 - `Climate.region` (Nomial Category): is the U.S. Climate regions as specified by the National Centers for Environmental Information. This feature is of data type 'object'. 
@@ -93,18 +93,18 @@ This feature is of data type 'float64'.
 
 **Model Construction**: 
 The necessary encodings for the nominal data were performed using OneHotEncoder. The quantitative features were kept as they were. 
-With the above transformers for each of the features, we used a ColumnTransformer to allocate a OneHotEncoder transformer and a "passthrough" for the numerical columns separately, and combined with a DecisionTreeClassifier as our binary-class classifier in one Pipeline object as our baseline model.
+With the above transformers for each of the features, we used a ColumnTransformer to allocate a OneHotEncoder transformer and a "passthrough" for the numerical columns separately, and combined with a DecisionTreeClassifier as our binary-class classifier in one make_pipeline object as our baseline model.
 
 **Model Performance**: 
-The model achieved a training accuracy of approximately 99.9% and a testing accuracy of about 68.4%. While the high training accuracy suggests that the model has learned from the data effectively, the lower testing accuracy indicates that the model may not generalize as well to unseen data. This discrepancy suggests that the model might be overfitting the training data. 
+The model achieved a training accuracy of approximately 99.9% and a testing accuracy of about 69.8%. While the high training accuracy suggests that the model has learned from the data effectively, the lower testing accuracy indicates that the model may not generalize as well to unseen data. This discrepancy suggests that the model might be overfitting the training data. 
 
-Our base_line_model has an F1 score of 0.6 on the test data set which indicates that the model has a moderate balance between precision and recall. This score suggests that the model is somewhat effective at classifying the positive class (in this case, 'severe weather') but also has room for improvement.
+Our baseline model has an F1 score of 0.61 on the test data set which indicates that the model has a moderate balance between precision and recall. This score suggests that the model is somewhat effective at classifying the positive class (in this case, 'severe weather') but also has room for improvement. The model has a recall of 0.69 and a precision of 0.55, which also reflects a moderate performance. 
 
 ![confusion matrix1](confusion_matrix1.png)
 
-Looking at the confusion matrix, we have 200 true negatives (TN) and 105 true positives (TP), which means the model correctly identified 200 cases as not severe weather and 105 cases as severe weather. However, there are 89 false positives (FP) and 49 false negatives (FN). The number of false negatives implies that the model missed 49 cases of severe weather, while the false positives indicate that 89 cases were incorrectly predicted as severe weather. This confusion matrix and the F1 score combined suggest that the model is better at identifying 'non-severe weather' instances than 'severe weather' ones.
+Looking at the confusion matrix, we have 202 true negatives (TN) and 107 true positives (TP), which means the model correctly identified 202 cases as not severe weather and 107 cases as severe weather. However, there are 87 false positives (FP) and 47 false negatives (FN). The number of false negatives implies that the model missed 47 cases of severe weather, while the false positives indicate that 87 cases were incorrectly predicted as severe weather. This confusion matrix and the F1 score combined suggest that the model is better at identifying 'non-severe weather' instances than 'severe weather' ones and the model needs to improve accuracy. 
 
-A focus on reducing both false positives and false negatives would help improve the model’s F1 score. We will be using feature engineering, hyperparameter tuning and a different model to improve upon our base_line model. 
+A focus on reducing both false positives and false negatives would help improve the model’s F1 score. We will be using feature engineering, hyperparameter tuning and a different model to improve upon our baseline model. 
 
 ---
 ## Final Model
@@ -125,27 +125,27 @@ Old features and new feature engineering:
 **Model Construction**: 
 The Random Forest classifier was chosen for the final model due to its robustness in handling both linear and non-linear relationships. 
 
-With the above transformers for each of the features, we used a ColumnTransformer to allocate a OneHotEncoder transformer and a "passthrough" for the numerical columns separately, and used a make_pipeline object in combination with the Random Forest classifier to complete our final model. We first set the hyperparameters to be: {`max_depth`: 5, `n_estimators`: 50, `min_samples_split`: 6} because we did not want our model to overfit the data and we would tune the hyperparameters later. 
+With the above transformers for each of the features, we used a ColumnTransformer to allocate a OneHotEncoder transformer and a Standard Scaler for the numerical columns separately, and used a make_pipeline object in combination with the Random Forest classifier to complete our final model. We first set the hyperparameters to be: {`max_depth`: 5, `n_estimators`: 50, `min_samples_split`: 6} because we did not want our model to overfit the data and we would tune the hyperparameters later. 
 
 The hyperparameters we tuned were: `n_estimators`, `max_depth` and `min_samples_split`. 
 
 `n_estimators` determines the number of trees in the forest. The first random forest classifier we fit had n_estimators of 50. More trees can improve model accuracy but also increase computational complexity.
 
-We chose to tune these parameters because the first random forest classifier we fit had a max_depth of None. Thus, we thought maybe there was a better max_depth that achieves the same accuracy but has a lower cost of computational resources. Also, deeper trees can capture more complex patterns but might lead to overfitting. 
+We chose to tune these parameters because the first random forest classifier we fit had a max_depth of 5. Thus, we thought maybe there was a better max_depth that achieves the same accuracy but has a lower cost of computational resources. Also, deeper trees can capture more complex patterns but might lead to overfitting. 
 
-`min_samples_split` specifies the minimum number of samples required to split an internal node. Our first random forest classifier had a min_samples_split of 2. Higher values prevent learning overly specific patterns, thus reducing overfitting. Thus, we wanted to see if there was a higher min_samples_split for our model. 
+`min_samples_split` specifies the minimum number of samples required to split an internal node. Our first random forest classifier had a min_samples_split of 6. Higher values prevent learning overly specific patterns, thus reducing overfitting. Thus, we wanted to see if there was a higher min_samples_split for our model. 
 
-The best-performing hyperparameters, determined using GridSearchCV, were 50 trees (`n_estimators`), a maximum depth (`max_depth`) of 6, and a minimum of 6 samples required to split a node (`min_samples_split`).
+The best-performing hyperparameters, determined using GridSearchCV, were 100 trees (`n_estimators`), a maximum depth (`max_depth`) of 4, and a minimum of 8 samples required to split a node (`min_samples_split`).
 
 **Model Performance**: 
 ![confusion matrix2](confusion_matrix2.png)
 
-Before tuning any hyperparameters, our model achieved a training accuracy of approximately % and a testing accuracy of about %. Although the training accuracy is a bit lower than that of the baseline model, our test accuracy is significantly larger. The model also has a F1 score of which is higher than that of the baseline model. 
+Before tuning any hyperparameters, our model achieved a training accuracy of approximately 85.0% and a testing accuracy of about 75.6%. Although the training accuracy is a bit lower than that of the baseline model, our test accuracy is significantly larger. The model also has a F1 score of 0.71 which is higher than that of the baseline model. The recall and  precision were 0.86 and 0.61. 
 
-After tuning the hyperparameters, our final model achieved a training accuracy of approximately 99.9% and a testing accuracy of about 68.4%. 
-This final model outperforms the baseline model with improved accuracy and a higher F1 score, indicating better balance between precision and recall. It suggests that the final model is better at generalizing and making distinctions between severe weather-caused outages and others.
+After tuning the hyperparameters, our final model achieved a training accuracy of approximately 84.6% and a testing accuracy of about 79.0%. The F1 score was 0.74 and the recall and precision of 0.84 and 0.65 respectively. 
+This final model outperforms the baseline model with improved testing accuracy and a higher F1 score, indicating better balance between precision and recall. It suggests that the final model is better at generalizing and making distinctions between severe weather-caused outages and others.
 
-An F1 score improvement from 0.59 to 0.75 represents a substantial enhancement in the model's precision and recall balance. It indicates that the final model is much better at correctly classifying power outages due to severe weather while reducing the instances of false positives and false negatives than the base_line_model. 
+An F1 score improvement from 0.61 of the baseline model to 0.74 of the final model represents a substantial enhancement in the model's precision and recall balance. It indicates that the final model is much better at correctly classifying power outages due to severe weather while reducing the instances of false positives and false negatives than the baseline_model. 
 
 ![confusion matrix3](confusion_matrix3.png)
 
