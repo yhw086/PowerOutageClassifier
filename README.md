@@ -180,6 +180,9 @@ Our model is fair. Its accuracy for moderate outage and severe outage are roughl
 
 Our model is not fair. Its accuracy for moderate outage and severe outage are significantly different, and any differences are not due to random chance.
 
+**Evaluation metric**: 
+We used accuracy as our evaluation metric same as we did with the models before. 
+
 **Test statistics**: 
 
 We chose to use the absolute observed difference in the accuracy of the two groups as our test statistics.
