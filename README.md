@@ -122,11 +122,14 @@ The model employs one-hot encoding to transform the categorical feature `U.S. st
 `Customers.affected` is scaled using StandardScaler for model compatibility. This feature is crucial as it may reflect the extent and severity of an outage, offering insights into the potential widespread impact of weather-related events. 
 
 Old features and new feature engineering:
-'Outage.duration`:
+`Outage.duration`, `Res.sales` and `Climate.region`:
 
 *Feature engineering: 
 
-The feature  `Outage.duration` quantifies the length of power outages in minutes and is normalized using StandardScaler to ensure consistent model interpretation across varying scales. Its significance lies in the potential correlation with Climate.region, hypothesizing that regions prone to extreme weather may exhibit prolonged outages, thereby helping the model ascertain regional impact patterns on outage durations. 
+The feature `Outage.duration` quantifies the length of power outages in minutes and is normalized using StandardScaler to ensure consistent model interpretation across varying scales. Its significance lies in the potential correlation with `Climate.region`, hypothesizing that regions prone to extreme weather may exhibit prolonged outages, thereby helping the model ascertain regional impact patterns on outage durations. Similarly, we applied a StandardScaler to the feature `Res.sales`. 
+
+We also applied OneHotEncoder to `'Climate.region`. 
+
 
 **Model Construction and Choice of Hyperparameter:**
 **Model Construction**: 
