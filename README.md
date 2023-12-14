@@ -138,13 +138,16 @@ We chose to tune these parameters because the first random forest classifier we 
 The best-performing hyperparameters, determined using GridSearchCV, were 50 trees (`n_estimators`), a maximum depth (`max_depth`) of 6, and a minimum of 6 samples required to split a node (`min_samples_split`).
 
 **Model Performance**: 
-Before tuning any hyperparameters, our model achieved a training accuracy of approximately % and a testing accuracy of about %. Although the training accuracy is a bit lower than that of the baseline model, our test accuracy is significantly larger. The model also has a F1 score of which is higher than that of the baseline model. 
+![confusion matrix2](confusion_matrix2.png)
 
+Before tuning any hyperparameters, our model achieved a training accuracy of approximately % and a testing accuracy of about %. Although the training accuracy is a bit lower than that of the baseline model, our test accuracy is significantly larger. The model also has a F1 score of which is higher than that of the baseline model. 
 
 After tuning the hyperparameters, our final model achieved a training accuracy of approximately 99.9% and a testing accuracy of about 68.4%. 
 This final model outperforms the baseline model with improved accuracy and a higher F1 score, indicating better balance between precision and recall. It suggests that the final model is better at generalizing and making distinctions between severe weather-caused outages and others.
 
 An F1 score improvement from 0.59 to 0.75 represents a substantial enhancement in the model's precision and recall balance. It indicates that the final model is much better at correctly classifying power outages due to severe weather while reducing the instances of false positives and false negatives than the base_line_model. 
+
+![confusion matrix3](confusion_matrix3.png)
 
 The improvement in our final model over the baseline model can also be observed through the confusion matrix. Our final model shows a higher number of true positives and true negatives and a lower number of false positives and false negatives compared to the baseline model, it signifies better performance in correctly classifying both severe weather-related outages and non-severe weather-related outages. This enhanced performance suggests a more accurate and reliable model.
 
