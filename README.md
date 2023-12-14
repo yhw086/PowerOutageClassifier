@@ -147,6 +147,10 @@ We chose to tune these parameters because the first random forest classifier we 
 
 `min_samples_split` specifies the minimum number of samples required to split an internal node. Our first random forest classifier had a min_samples_split of 6. Higher values prevent learning overly specific patterns, thus reducing overfitting. Thus, we wanted to see if there was a higher min_samples_split for our model. 
 
+**Method of finding Hyperparameters**
+
+GridSearchCV
+
 **Best Hyperparameters**:
 
 The best-performing hyperparameters, determined using GridSearchCV, were 100 trees (`n_estimators`), a maximum depth (`max_depth`) of 4, and a minimum of 8 samples required to split a node (`min_samples_split`).
