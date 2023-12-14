@@ -1,7 +1,7 @@
 # PowerOutageClassifier
 **Authors**: Yihuan Wang, Jiayi Zhu
 ## Project Overview
-This is a data science project investigating the causes of electricity outages.
+This is a data science project investigating the causes of power outages.
 
 The dataset used in this study is obtained from Purdue University's laboratory and is titled "Major Power Outage Risks in the U.S.". It comprises 1,534 records, each representing a power outage event in the United States, and includes 55 columns. Building upon the data analysis we have done [previously](https://yhw086.github.io/PowerOutageAnalysis/), we have slightly modified our data cleaning process for this project. We have converted the `xlsx` file into `csv` file and drop unnecessary rows and columns. Details will be included below.  
 
@@ -11,28 +11,28 @@ The dataset used to investigate the topic can be found [here](https://www.scienc
 ## Framing Investigation Problem
 Our project aims to predict the likelihood of power outages being caused by severe weather conditions. Utilizing a two-phase model approach, we start with a base model employing features like `Climate.region`, `Res.sales`, and `Outage.duration`. These features are readily available and provide an initial framework for prediction. As we progress to our final model, we improve by including additional variables such as `U.s._state` and `Customers.affected`, aiming to enhance the precision of our predictions. The underlying hypothesis is that severe weather significantly impacts the incidence and severity of power outages. Our project aims to identify key patterns and factors specific to weather-induced power disruptions. This could have far-reaching implications for emergency response planning, infrastructure resilience enhancement, and policy-making in the energy sector.
 
-**Investigation Problem**: 
 ### Binary classification Problem
+
 Our project is designed to predict, power outages starting in 2013, whether they are due to severe weather, providing a binary outcome of 1 or 0.
 
-**Response Variable**: 
+### Response Variable: 
 The response variable is a binary variable indicating whether a power outage is caused by Severe Weather or not. It has two possible values: 1 for outage being caused by Severe Weather and 0 for being caused by other reasons.
 
-### Justification
+### Justification for response variable:
 Our project's objective to predict power outages starting from 2013 and whether they are caused by severe weather stems from the hypothesis that extreme weather conditions significantly influence the frequency and severity of outages. In addition, we made this choice because of the observation that out of the 7 cause categories, about half of all the outages in the dataset were caused by `severe weather`.
 By focusing on the binary outcome of a weather-related cause, we wish to uncover patterns and contributing factors that are specific to weather-induced outages. This insight could be pivotal for improving preparedness and response strategies against such disruptions.
 
-**Measuring Metrics**: 
-Our choice of evaluation metric will be accuracy since our datset has balanced classes. For example, the code below shows that approximately 50% of the `Cause.categoty` is `severe weather`. We will also use F1 score and a confusion matrix to help visualize the performance. 
+### Measuring Metrics: 
+Our choice of evaluation metric will be accuracy since our datset has balanced classes. We have found that approximately 50% of the `Cause.categoty` is `severe weather`. We will also use F1 score and a confusion matrix to help visualize the performance. 
 
-### Justification
+### Justification for measuring metrics:
 For our power outage prediction project, we will primarily use accuracy as our evaluation metric because our dataset features balanced classes, with `severe weather` causes making up about half of the cases. To ensure a comprehensive assessment, it's important to account for the importance of both false positives and false negatives in our context, so, we will also employ the F1 score, which integrates precision and recall. Additionally, we'll utilize a confusion matrix to provide a clear visualization of our model's performance, highlighting its strengths and weaknesses in predicting weather-related outages.
 This dual approach ensures that our evaluation is not only reflective of overall correctness but is also sensitive to the specific costs associated with incorrect predictions in power outage scenarios.
 
-**Information At Time of Prediction**: 
+### Information At Time of Prediction: 
 The features we will be using for our base model include `Climate.region`, `Res.sales`, `Outage.duration`. These features are appropriate because they are likely available before an outage occurs or early into the outage, making them suitable for initial predictions.
 The features we will be using for our final model include `Climate.region`, `U.s._state`, `Outage.duration`, `Res.sales`, `Customers.affected`. The addition of `U.s._state` and `Customers.affected` in the final model is reasonable. `U.s._state` can provide localized context which might be critical for predicting outages, and `Customers.affected` could be indicative of the outage's severity, which might correlate with whether it's caused by severe weather.
-\n These features will be accessible when we make our predictions since `Climate.region` is the U.S. Climate regions defined for each reagion and not affected by outages. Similarly, `Res.sales` and `U.s._state` correspond to the Electricity consumption in the residential sector and the state names of America. We can also use `Outage.duration` and `Customers.affected` to predict if the outage was caused by `severe weather` since it might be the case that an outage has occurred but we do not know the cause of the outage. Therefore, the features included in this report will be accessible at the time of prediction. 
+These features will be accessible when we make our predictions since `Climate.region` is the U.S. Climate regions defined for each reagion and not affected by outages. Similarly, `Res.sales` and `U.s._state` correspond to the Electricity consumption in the residential sector and the state names of America. We can also use `Outage.duration` and `Customers.affected` to predict if the outage was caused by `severe weather` since it might be the case that an outage has occurred but we do not know the cause of the outage. Therefore, the features included in this report will be accessible at the time of prediction. 
 
 **Data Processing**:
 We change the `Cause.category` column to 0's and 1's corresponding to the entry being equal to `severe weather` or not. 
@@ -125,10 +125,11 @@ Old features and new feature engineering:
 **Model Construction**: 
 The Random Forest classifier was chosen for the final model due to its robustness in handling both linear and non-linear relationships. 
 
-With the above transformers for each of the features, we used a ColumnTransformer to allocate a OneHotEncoder transformer and a "passthrough" for the numerical columns separately, and used a make_pipeline object in combination with the Random Forest classifier to complete c=our final model. 
+With the above transformers for each of the features, we used a ColumnTransformer to allocate a OneHotEncoder transformer and a "passthrough" for the numerical columns separately, and used a make_pipeline object in combination with the Random Forest classifier to complete our final model. We first set the hyperparameters to be: {`max_depth`: 5, `n_estimators`: 50, `min_samples_split`: 6} because we did not want our model to overfit the data and we would tune the hyperparameters later. 
 
 The hyperparameters we tuned were: `n_estimators`, `max_depth` and `min_samples_split`. 
-`n_estimators` determines the number of trees in the forest. The first random forest classifier we fit had n_estimators of 100. More trees can improve model accuracy but also increase computational complexity.
+
+`n_estimators` determines the number of trees in the forest. The first random forest classifier we fit had n_estimators of 50. More trees can improve model accuracy but also increase computational complexity.
 
 We chose to tune these parameters because the first random forest classifier we fit had a max_depth of None. Thus, we thought maybe there was a better max_depth that achieves the same accuracy but has a lower cost of computational resources. Also, deeper trees can capture more complex patterns but might lead to overfitting. 
 
@@ -137,14 +138,21 @@ We chose to tune these parameters because the first random forest classifier we 
 The best-performing hyperparameters, determined using GridSearchCV, were 50 trees (`n_estimators`), a maximum depth (`max_depth`) of 6, and a minimum of 6 samples required to split a node (`min_samples_split`).
 
 **Model Performance**: 
-This final model's performance outshone the baseline model with improved accuracy and a higher F1 score, indicating better balance between precision and recall. It suggests that the final model is better at generalizing and making distinctions between severe weather-caused outages and others.
+Before tuning any hyperparameters, our model achieved a training accuracy of approximately % and a testing accuracy of about %. Although the training accuracy is a bit lower than that of the baseline model, our test accuracy is significantly larger. The model also has a F1 score of which is higher than that of the baseline model. 
+
+
+After tuning the hyperparameters, our final model achieved a training accuracy of approximately 99.9% and a testing accuracy of about 68.4%. 
+This final model outperforms the baseline model with improved accuracy and a higher F1 score, indicating better balance between precision and recall. It suggests that the final model is better at generalizing and making distinctions between severe weather-caused outages and others.
 
 An F1 score improvement from 0.59 to 0.75 represents a substantial enhancement in the model's precision and recall balance. It indicates that the final model is much better at correctly classifying power outages due to severe weather while reducing the instances of false positives and false negatives than the base_line_model. 
+
+The improvement in our final model over the baseline model can also be observed through the confusion matrix. Our final model shows a higher number of true positives and true negatives and a lower number of false positives and false negatives compared to the baseline model, it signifies better performance in correctly classifying both severe weather-related outages and non-severe weather-related outages. This enhanced performance suggests a more accurate and reliable model.
+
 This suggests the additional features and hyperparameter tuning have likely contributed to capturing the underlying patterns in the data more effectively.
 
 ## Fairness Analysis
 **Group A and Group B**: 
-For the Fairness Analysis part, we separated two groups by the mean of the column `Outage.duration`, setting the threshold as 2626 minutes.
+For the Fairness Analysis part, we separated two groups by the mean of the column `Outage.duration`, setting the threshold as 2626 minutes since we have the mean of 2625.39837398374 for original Outage.duration.
 - moderate outage: a group that has an outage duration of less than 2626 minutes.
 - severe outage: a group that has an outage duration of more than 2626 minutes.
 
@@ -168,7 +176,5 @@ We chose to use the absolute observed difference in the accuracy of the two grou
 
 We use a permutation test to shuffle `outage_dur_dummy` the dummy number of moderate outage and severe outages 10000 times. We can get 10000 simulating absolute differences in the accuracy of two groups. Then we compare these 10000 absolute differences to the observed difference, and calculate the p-value which is the probability of observing an absolute difference as extreme or more extreme than the observed absolute difference, assuming the null hypothesis is true. Observed statistic: 0.012907419444702417.
 
-Finally, we get the p-value, which is 0.3257. As 0.05 is our significance threshold, since 0.3257 > 0.05, we fail to reject the null hypothesis that our model is fair. The result suggests that the accuracy for moderate outage and severe outage is not statistically different. In essence, our model is fair to the group with moderate outage and severe outage conditions.
-
-**Conclusion**: 
+Finally, we get the p-value, which is 0.3257. As 0.05 is our significance threshold, since 0.3257 > 0.05, we fail to reject the null hypothesis. The result suggests that the accuracy for moderate outage and severe outage are not statistically different. However, we cannot say that our model is absolutely fair to the group with moderate outage and severe outage conditions. For further determining the fairness of our model, it is better to test with more data to support it.
 
