@@ -110,16 +110,23 @@ A focus on reducing both false positives and false negatives would help improve 
 ## Final Model
 we decided to add the features below to improve our model:
 `U.s._state`(nominal feature): This feature captures geographic and infrastructural information that can influence outage risks and responses.
-*Feature Engineering: The model employs one-hot encoding to transform the categorical feature `U.S. state` into a numerical format suitable for machine learning algorithms. Each state is represented by a unique binary column that reflects its presence (1) or absence (0) in the dataset. This process allows the model to incorporate geographical information into its predictions, with the 'ColumnTransformer' ensuring that the numerical features are retained without alteration.
+
+*Feature Engineering: 
+
+The model employs one-hot encoding to transform the categorical feature `U.S. state` into a numerical format suitable for machine learning algorithms. Each state is represented by a unique binary column that reflects its presence (1) or absence (0) in the dataset. This process allows the model to incorporate geographical information into its predictions, with the 'ColumnTransformer' ensuring that the numerical features are retained without alteration.
 
 `Customers.affected`: This serves as an indicator of an outage's impact, which can correlate with the severity and nature of the outage, thus providing critical insight into its likely causes. A higher number of affected customers could signify a more severe weather event, allowing the model to make more informed predictions about the cause of outages. We believe this feature will enhance our model's ability to interpret complex patterns in the data. 
 
 *Feature Engineering: 
+
 `Customers.affected` is scaled using StandardScaler for model compatibility. This feature is crucial as it may reflect the extent and severity of an outage, offering insights into the potential widespread impact of weather-related events. 
 
 Old features and new feature engineering:
 'Outage.duration`:
-*Feature engineering: The feature  `Outage.duration` quantifies the length of power outages in minutes and is normalized using StandardScaler to ensure consistent model interpretation across varying scales. Its significance lies in the potential correlation with Climate.region, hypothesizing that regions prone to extreme weather may exhibit prolonged outages, thereby helping the model ascertain regional impact patterns on outage durations. 
+
+*Feature engineering: 
+
+The feature  `Outage.duration` quantifies the length of power outages in minutes and is normalized using StandardScaler to ensure consistent model interpretation across varying scales. Its significance lies in the potential correlation with Climate.region, hypothesizing that regions prone to extreme weather may exhibit prolonged outages, thereby helping the model ascertain regional impact patterns on outage durations. 
 
 **Model Construction and Choice of Hyperparameter:**
 **Model Construction**: 
