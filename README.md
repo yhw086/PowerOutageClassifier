@@ -162,6 +162,8 @@ Our model is not fair. Its accuracy for moderate outage and severe outage are si
 
 We chose to use the absolute observed difference in the accuracy of the two groups as our test statistics.
 
+<iframe src="hypo.html" width=800 height=600 frameBorder=0></iframe>
+
 **Construction and Evaluation Metrics**: 
 
 We use a permutation test to shuffle `outage_dur_dummy` the dummy number of moderate outage and severe outages 10000 times. We can get 10000 simulating absolute differences in the accuracy of two groups. Then we compare these 10000 absolute differences to the observed difference, and calculate the p-value which is the probability of observing an absolute difference as extreme or more extreme than the observed absolute difference, assuming the null hypothesis is true. Observed statistic: 0.012907419444702417.
