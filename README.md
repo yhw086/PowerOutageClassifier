@@ -142,10 +142,11 @@ The best-performing hyperparameters, determined using GridSearchCV, were 100 tre
 
 Before tuning any hyperparameters, our model achieved a training accuracy of approximately 85.0% and a testing accuracy of about 75.6%. Although the training accuracy is a bit lower than that of the baseline model, our test accuracy is significantly larger. The model also has a F1 score of 0.71 which is higher than that of the baseline model. The recall and  precision were 0.86 and 0.61. 
 
-After tuning the hyperparameters, our final model achieved a training accuracy of approximately 84.6% and a testing accuracy of about 79.0%. The F1 score was 0.74 and the recall and precision of 0.84 and 0.65 respectively. 
+After tuning the hyperparameters, our final model achieved a training accuracy of approximately 84.6% and a testing accuracy of about 79.0%. The F1 score was 0.74 and the recall and precision of 0.84 and 0.65 respectively. Compared to before tuning the hyperparameters, the training accuracy decreased a bit but the testing accuracy increased by about 3.4%. This was not very significant but the overall balance between precision and recall increased. 
+
 This final model outperforms the baseline model with improved testing accuracy and a higher F1 score, indicating better balance between precision and recall. It suggests that the final model is better at generalizing and making distinctions between severe weather-caused outages and others.
 
-An F1 score improvement from 0.61 of the baseline model to 0.74 of the final model represents a substantial enhancement in the model's precision and recall balance. It indicates that the final model is much better at correctly classifying power outages due to severe weather while reducing the instances of false positives and false negatives than the baseline_model. 
+An F1 score improvement from 0.61 of the baseline model to 0.74 of the final model represents a substantial enhancement in the model's precision and recall balance. It indicates that the final model is much better at correctly classifying power outages due to severe weather while reducing the instances of false positives and false negatives than the baseline model. 
 
 ![confusion matrix3](confusion_matrix3.png)
 
