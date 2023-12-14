@@ -51,6 +51,7 @@ Below are the first five rows of the training dataset for our base_ine_model:
 |  7 | East North Central | 2.1875e+06| 2970.0          |
 
 Below are the first five rows of the test dataset for our base_ine_model:
+
 |    | Climate Region     | Res.sales | Outage.duration |
 |----|--------------------|-----------|-----------------|
 |  2 | East North Central | 1.5869e+06| 1.0             |
@@ -60,6 +61,7 @@ Below are the first five rows of the test dataset for our base_ine_model:
 | 11 | East North Central | 1.6886e+06| 7740.0          |
 
 Below are the first five rows of the training dataset for our final_model:
+
 |    | Climate Region     | U.S. State | Outage Duration | Residential Sales | Customers Affected |
 |----|--------------------|------------|-----------------|-------------------|--------------------|
 |  1 | East North Central | Minnesota  | 3060.0          | 2.332915e+06      | 70000.0            |
@@ -69,6 +71,7 @@ Below are the first five rows of the training dataset for our final_model:
 |  7 | East North Central | Minnesota  | 2970.0          | 2.187537e+06      | 63000.0            |
 
 Below are the first five rows of the test dataset for our final_model:
+
 |    | Climate Region     | U.S. State | Outage Duration | Residential Sales | Customers Affected |
 |----|--------------------|------------|-----------------|-------------------|--------------------|
 |  2 | East North Central | Minnesota  | 1.0             | 1.586986e+06      | 124006.57         |
