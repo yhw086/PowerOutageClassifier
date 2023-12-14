@@ -3,7 +3,7 @@
 ## Project Overview
 This is a data science project investigating the causes of electricity outages.
 
-The dataset used in this study is obtained from Purdue University's laboratory and is titled "Major Power Outage Risks in the U.S.". It comprises 1,534 records, each representing a power outage event in the United States, and includes 55 columns. Building upon the data analysis we have done [previously](https://yhw086.github.io/PowerOutageAnalysis/), we have slightly modified our data cleaning process for this project. We have converted the `xlsx` file into `csv` file and drop unnecessary rows and columns.Details will be included below.  
+The dataset used in this study is obtained from Purdue University's laboratory and is titled "Major Power Outage Risks in the U.S.". It comprises 1,534 records, each representing a power outage event in the United States, and includes 55 columns. Building upon the data analysis we have done [previously](https://yhw086.github.io/PowerOutageAnalysis/), we have slightly modified our data cleaning process for this project. We have converted the `xlsx` file into `csv` file and drop unnecessary rows and columns. Details will be included below.  
 
 The dataset used to investigate the topic can be found [here](https://www.sciencedirect.com/science/article/pii/S2352340918307182#s0015). This project is for DSC80 at UCSD.
 
@@ -93,9 +93,10 @@ This feature is of data type 'float64'.
 
 **Model Construction**: 
 The necessary encodings for the nominal data were performed using OneHotEncoder. The quantitative features were kept as they were. 
+With the above transformers for each of the features, we used a ColumnTransformer to allocate a OneHotEncoder transformer and a "passthrough" for the numerical columns separately, and combined with a DecisionTreeClassifier as our binary-class classifier in one Pipeline object as our baseline model.
 
 **Model Performance**: 
-The model achieved a training accuracy of approximately 99.9% and a testing accuracy of about 68.4%. While the high training accuracy suggests that the model has learned from the data effectively, the lower testing accuracy indicates that the model may not generalize as well to unseen data. This discrepancy suggests that the model might be overfitting the training data. The F1 score, which balances precision and recall, is particularly useful in binary classification problems like this, where the cost of false positives and false negatives may differ. 
+The model achieved a training accuracy of approximately 99.9% and a testing accuracy of about 68.4%. While the high training accuracy suggests that the model has learned from the data effectively, the lower testing accuracy indicates that the model may not generalize as well to unseen data. This discrepancy suggests that the model might be overfitting the training data. 
 
 Our base_line_model has an F1 score of 0.6 on the test data set which indicates that the model has a moderate balance between precision and recall. This score suggests that the model is somewhat effective at classifying the positive class (in this case, 'severe weather') but also has room for improvement.
 
@@ -107,26 +108,65 @@ A focus on reducing both false positives and false negatives would help improve 
 
 ---
 ## Final Model
+we decided to add the features below to improve our model:
+`U.s._state`(nominal feature): This feature captures geographic and infrastructural information that can influence outage risks and responses.
+*Feature Engineering: The model employs one-hot encoding to transform the categorical feature `U.S. state` into a numerical format suitable for machine learning algorithms. Each state is represented by a unique binary column that reflects its presence (1) or absence (0) in the dataset. This process allows the model to incorporate geographical information into its predictions, with the 'ColumnTransformer' ensuring that the numerical features are retained without alteration.
 
+`Customers.affected`: This serves as an indicator of an outage's impact, which can correlate with the severity and nature of the outage, thus providing critical insight into its likely causes. A higher number of affected customers could signify a more severe weather event, allowing the model to make more informed predictions about the cause of outages. We believe this feature will enhance our model's ability to interpret complex patterns in the data. 
+
+*Feature Engineering: 
+`Customers.affected` is scaled using StandardScaler for model compatibility. This feature is crucial as it may reflect the extent and severity of an outage, offering insights into the potential widespread impact of weather-related events. 
+
+Old features and new feature engineering:
+'Outage.duration`:
+*Feature engineering: The feature  `Outage.duration` quantifies the length of power outages in minutes and is normalized using StandardScaler to ensure consistent model interpretation across varying scales. Its significance lies in the potential correlation with Climate.region, hypothesizing that regions prone to extreme weather may exhibit prolonged outages, thereby helping the model ascertain regional impact patterns on outage durations. 
 
 **Model Construction and Choice of Hyperparameter:**
 **Model Construction**: 
+The Random Forest classifier was chosen for the final model due to its robustness in handling both linear and non-linear relationships. 
+
+With the above transformers for each of the features, we used a ColumnTransformer to allocate a OneHotEncoder transformer and a "passthrough" for the numerical columns separately, and used a make_pipeline object in combination with the Random Forest classifier to complete c=our final model. 
+
+The hyperparameters we tuned were: `n_estimators`, `max_depth` and `min_samples_split`. 
+`n_estimators` determines the number of trees in the forest. The first random forest classifier we fit had n_estimators of 100. More trees can improve model accuracy but also increase computational complexity.
+
+We chose to tune these parameters because the first random forest classifier we fit had a max_depth of None. Thus, we thought maybe there was a better max_depth that achieves the same accuracy but has a lower cost of computational resources. Also, deeper trees can capture more complex patterns but might lead to overfitting. 
+
+`min_samples_split` specifies the minimum number of samples required to split an internal node. Our first random forest classifier had a min_samples_split of 2. Higher values prevent learning overly specific patterns, thus reducing overfitting. Thus, we wanted to see if there was a higher min_samples_split for our model. 
+
+The best-performing hyperparameters, determined using GridSearchCV, were 50 trees (`n_estimators`), a maximum depth (`max_depth`) of 6, and a minimum of 6 samples required to split a node (`min_samples_split`).
 
 **Model Performance**: 
+This final model's performance outshone the baseline model with improved accuracy and a higher F1 score, indicating better balance between precision and recall. It suggests that the final model is better at generalizing and making distinctions between severe weather-caused outages and others.
+
+An F1 score improvement from 0.59 to 0.75 represents a substantial enhancement in the model's precision and recall balance. It indicates that the final model is much better at correctly classifying power outages due to severe weather while reducing the instances of false positives and false negatives than the base_line_model. 
+This suggests the additional features and hyperparameter tuning have likely contributed to capturing the underlying patterns in the data more effectively.
 
 ## Fairness Analysis
+**Group A and Group B**: 
+For the Fairness Analysis part, we separated two groups by the mean of the column `Outage.duration`, setting the threshold as 2626 minutes.
+- moderate outage: a group that has an outage duration of less than 2626 minutes.
+- severe outage: a group that has an outage duration of more than 2626 minutes.
 
-
-**Group A and Group B**: The two groups we are going to use in this permutation test will
+After setting these two groups, we generalize the hypothesis test to see if our model is fair or not.
 
 **Null Hypothesis**: 
 
+Our model is fair. Its accuracy for moderate outage and severe outage are roughly the same, and any differences are due to random chance.
+
 **Alternative Hypothesis**: 
 
-**Significance Level**: 
+Our model is not fair. Its accuracy for moderate outage and severe outage are significantly different, and any differences are not due to random chance.
 
-**Evaluation Metrics and Test Statistics**: 
+**Test statistics**: 
 
-**P-Value Result**:
+We chose to use the absolute observed difference in the accuracy of the two groups as our test statistics.
+
+**Construction and Evaluation Metrics**: 
+
+We use a permutation test to shuffle `outage_dur_dummy` the dummy number of moderate outage and severe outages 10000 times. We can get 10000 simulating absolute differences in the accuracy of two groups. Then we compare these 10000 absolute differences to the observed difference, and calculate the p-value which is the probability of observing an absolute difference as extreme or more extreme than the observed absolute difference, assuming the null hypothesis is true. Observed statistic: 0.012907419444702417.
+
+Finally, we get the p-value, which is 0.3257. As 0.05 is our significance threshold, since 0.3257 > 0.05, we fail to reject the null hypothesis that our model is fair. The result suggests that the accuracy for moderate outage and severe outage is not statistically different. In essence, our model is fair to the group with moderate outage and severe outage conditions.
 
 **Conclusion**: 
+
