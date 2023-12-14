@@ -128,14 +128,16 @@ Old features and new feature engineering:
 
 The feature `Outage.duration` quantifies the length of power outages in minutes and is normalized using StandardScaler to ensure consistent model interpretation across varying scales. Its significance lies in the potential correlation with `Climate.region`, hypothesizing that regions prone to extreme weather may exhibit prolonged outages, thereby helping the model ascertain regional impact patterns on outage durations. Similarly, we applied a StandardScaler to the feature `Res.sales`. 
 
-We also applied OneHotEncoder to `'Climate.region`. 
+We also applied OneHotEncoder to `Climate.region`. 
 
 
-**Model Construction and Choice of Hyperparameter:**
 **Model Construction**: 
+
 The Random Forest classifier was chosen for the final model due to its robustness in handling both linear and non-linear relationships. 
 
 With the above transformers for each of the features, we used a ColumnTransformer to allocate a OneHotEncoder transformer and a Standard Scaler for the numerical columns separately, and used a make_pipeline object in combination with the Random Forest classifier to complete our final model. We first set the hyperparameters to be: {`max_depth`: 5, `n_estimators`: 50, `min_samples_split`: 6} because we did not want our model to overfit the data and we would tune the hyperparameters later. 
+
+**Choice of Hyperparameter**:
 
 The hyperparameters we tuned were: `n_estimators`, `max_depth` and `min_samples_split`. 
 
@@ -144,6 +146,8 @@ The hyperparameters we tuned were: `n_estimators`, `max_depth` and `min_samples_
 We chose to tune these parameters because the first random forest classifier we fit had a max_depth of 5. Thus, we thought maybe there was a better max_depth that achieves the same accuracy but has a lower cost of computational resources. Also, deeper trees can capture more complex patterns but might lead to overfitting. 
 
 `min_samples_split` specifies the minimum number of samples required to split an internal node. Our first random forest classifier had a min_samples_split of 6. Higher values prevent learning overly specific patterns, thus reducing overfitting. Thus, we wanted to see if there was a higher min_samples_split for our model. 
+
+**Best Hyperparameters**:
 
 The best-performing hyperparameters, determined using GridSearchCV, were 100 trees (`n_estimators`), a maximum depth (`max_depth`) of 4, and a minimum of 8 samples required to split a node (`min_samples_split`).
 
